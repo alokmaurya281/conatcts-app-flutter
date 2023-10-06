@@ -5,7 +5,7 @@ class ContactWidgetTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Padding(
+    return Padding(
       padding: EdgeInsets.symmetric(vertical: 8),
       child: ListTile(
         leading: SizedBox(

@@ -1,9 +1,11 @@
+import 'package:contacts_app/providers/auth_provider.dart';
 import 'package:contacts_app/providers/theme_provider.dart';
 import 'package:contacts_app/screens/contact_details_screen.dart';
+import 'package:contacts_app/screens/login_screen.dart';
 import 'package:contacts_app/widgets/contact_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:shimmer/shimmer.dart';
+// import 'package:shimmer/shimmer.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -17,7 +19,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(Duration(seconds: 3), () {
+    Future.delayed(const Duration(seconds: 3), () {
       setState(() {
         isLoading = false;
       });
@@ -31,7 +33,7 @@ class _HomeScreenState extends State<HomeScreen> {
         title: const Text('Contacts'),
         actions: [
           Padding(
-            padding: EdgeInsets.only(right: 16),
+            padding: const EdgeInsets.only(right: 16),
             child: GestureDetector(
               onTap: () {
                 context.read<ThemeProvider>().setTheme();
@@ -45,6 +47,24 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
           Padding(
+            padding: const EdgeInsets.only(right: 16),
+            child: GestureDetector(
+              onTap: () async {
+                await context.read<AuthProvider>().signout();
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const LoginScreen(),
+                  ),
+                );
+              },
+              child: const Icon(
+                Icons.logout,
+                size: 24,
+              ),
+            ),
+          ),
+          const Padding(
             padding: EdgeInsets.only(right: 16),
             child: Icon(
               Icons.settings,

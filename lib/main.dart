@@ -21,24 +21,36 @@ void main() {
   );
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  @override
 
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    // final authProvider = Provider.of<AuthProvider>(context);
+    // authProvider.getToken();
     return MaterialApp(
-        theme: ThemeData(
-          useMaterial3: true,
-        ),
-        darkTheme: ThemeData.dark(
-          useMaterial3: true,
-        ),
-        themeMode: context.read<ThemeProvider>().isDark
-            ? ThemeMode.dark
-            : ThemeMode.light,
-        home: context.read<AuthProvider>().isLoggedIn
-            ? const HomeScreen()
-            : const LoginScreen());
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        useMaterial3: true,
+      ),
+      darkTheme: ThemeData.dark(
+        useMaterial3: true,
+      ),
+      themeMode: context.read<ThemeProvider>().isDark
+          ? ThemeMode.dark
+          : ThemeMode.light,
+      home: context.read<AuthProvider>().isLoggedIn &&
+              context.read<AuthProvider>().accessToken.isNotEmpty
+          ? const HomeScreen()
+          : const LoginScreen(),
+    );
   }
 }

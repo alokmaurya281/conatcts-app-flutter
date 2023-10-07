@@ -134,6 +134,8 @@ class ContactsProvider extends ChangeNotifier {
 
   Future<void> getContactDetailsById(String token, String id) async {
     _error = '';
+
+    _contact = Contact(id: '', name: '', email: '', phone: '', userId: '');
     // notifyListeners();
     try {
       final response = await http.get(
@@ -151,6 +153,7 @@ class ContactsProvider extends ChangeNotifier {
             userId: data['data']['user_id'],
             phone: data['data']['phone'],
             email: data['data']['email']);
+        // _isLoading = false;
         notifyListeners();
       } else {
         _error = data['message'];
@@ -160,5 +163,7 @@ class ContactsProvider extends ChangeNotifier {
       _error = e.toString();
       notifyListeners();
     }
+    _isLoading = false;
+    notifyListeners();
   }
 }

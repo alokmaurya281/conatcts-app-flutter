@@ -1,5 +1,6 @@
 import 'package:contacts_app/providers/auth_provider.dart';
 import 'package:contacts_app/providers/contacts_provider.dart';
+import 'package:contacts_app/providers/theme_provider.dart';
 import 'package:contacts_app/screens/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -31,7 +32,9 @@ class _ContactFormScreenState extends State<ContactFormScreen> {
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(.7),
+                  color: context.read<ThemeProvider>().isDark
+                      ? const Color.fromARGB(255, 66, 66, 66).withOpacity(.7)
+                      : Colors.white.withOpacity(.7),
                   borderRadius: BorderRadius.circular(15)),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -54,7 +57,9 @@ class _ContactFormScreenState extends State<ContactFormScreen> {
                     margin: const EdgeInsets.all(8),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(15),
-                      color: const Color.fromARGB(255, 212, 212, 212),
+                      color: context.read<ThemeProvider>().isDark
+                          ? Colors.black.withOpacity(.7)
+                          : const Color.fromARGB(255, 183, 183, 183)
                     ),
                     child: TextFormField(
                       controller: _nameController,
@@ -73,7 +78,9 @@ class _ContactFormScreenState extends State<ContactFormScreen> {
                     margin: const EdgeInsets.all(8),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(15),
-                      color: const Color.fromARGB(255, 212, 212, 212),
+                      color: context.read<ThemeProvider>().isDark
+                          ? Colors.black.withOpacity(.7)
+                          : const Color.fromARGB(255, 183, 183, 183)
                     ),
                     child: TextFormField(
                       controller: _emailController,
@@ -92,14 +99,17 @@ class _ContactFormScreenState extends State<ContactFormScreen> {
                     margin: const EdgeInsets.all(8),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(15),
-                      color: const Color.fromARGB(255, 212, 212, 212),
+                      color: context.read<ThemeProvider>().isDark
+                          ? Colors.black.withOpacity(.7)
+                          : const Color.fromARGB(255, 183, 183, 183)
+                              .withOpacity(.7),
                     ),
                     child: TextFormField(
                       controller: _phoneController,
                       style: const TextStyle(fontSize: 14),
                       decoration: const InputDecoration(
                         hintText: 'Enter Mobile Number',
-                        prefixIcon: Icon(Icons.lock),
+                        prefixIcon: Icon(Icons.call),
                         border: InputBorder.none,
                         enabledBorder: InputBorder.none,
                       ),

@@ -84,6 +84,9 @@ class AuthProvider extends ChangeNotifier {
       if (response.statusCode == 200) {
         await setToken(true, data['accessToken']);
         await getToken();
+        _isLoggedIn = true;
+        _accessToken = data['accessToken'];
+
         notifyListeners();
       } else {
         _error = data['message'];

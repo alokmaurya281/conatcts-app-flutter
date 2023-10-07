@@ -1,5 +1,6 @@
 import 'package:contacts_app/providers/auth_provider.dart';
 import 'package:contacts_app/providers/contacts_provider.dart';
+import 'package:contacts_app/providers/theme_provider.dart';
 import 'package:contacts_app/screens/contact_details_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -46,7 +47,9 @@ class _ContactUpdateFormScreenState extends State<ContactUpdateFormScreen> {
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(.7),
+                  color: context.read<ThemeProvider>().isDark
+                      ? Color.fromARGB(255, 55, 55, 55).withOpacity(.7)
+                      : Colors.white.withOpacity(.7),
                   borderRadius: BorderRadius.circular(15)),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -68,9 +71,10 @@ class _ContactUpdateFormScreenState extends State<ContactUpdateFormScreen> {
                     height: 50,
                     margin: const EdgeInsets.all(8),
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(15),
-                      color: const Color.fromARGB(255, 212, 212, 212),
-                    ),
+                        borderRadius: BorderRadius.circular(15),
+                        color: context.read<ThemeProvider>().isDark
+                            ? Colors.black.withOpacity(.7)
+                            : const Color.fromARGB(255, 183, 183, 183)),
                     child: TextFormField(
                       controller: _nameController,
                       style: const TextStyle(fontSize: 14),
@@ -87,9 +91,10 @@ class _ContactUpdateFormScreenState extends State<ContactUpdateFormScreen> {
                     height: 50,
                     margin: const EdgeInsets.all(8),
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(15),
-                      color: const Color.fromARGB(255, 212, 212, 212),
-                    ),
+                        borderRadius: BorderRadius.circular(15),
+                        color: context.read<ThemeProvider>().isDark
+                            ? Colors.black.withOpacity(.7)
+                            : const Color.fromARGB(255, 183, 183, 183)),
                     child: TextFormField(
                       controller: _emailController,
                       style: const TextStyle(fontSize: 14),
@@ -106,9 +111,10 @@ class _ContactUpdateFormScreenState extends State<ContactUpdateFormScreen> {
                     height: 50,
                     margin: const EdgeInsets.all(8),
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(15),
-                      color: const Color.fromARGB(255, 212, 212, 212),
-                    ),
+                        borderRadius: BorderRadius.circular(15),
+                        color: context.read<ThemeProvider>().isDark
+                            ? Colors.black.withOpacity(.7)
+                            : const Color.fromARGB(255, 183, 183, 183)),
                     child: TextFormField(
                       controller: _phoneController,
                       style: const TextStyle(fontSize: 14),

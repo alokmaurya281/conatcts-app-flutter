@@ -1,8 +1,5 @@
-import 'package:contacts_app/providers/auth_provider.dart';
-import 'package:contacts_app/providers/contacts_provider.dart';
 import 'package:contacts_app/screens/contact_update_form_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class ContactDetailsScreen extends StatefulWidget {
   final String id;
@@ -19,30 +16,25 @@ class ContactDetailsScreen extends StatefulWidget {
 class _ContactDetailsScreenState extends State<ContactDetailsScreen> {
   @override
   Widget build(BuildContext context) {
-    Provider.of<ContactsProvider>(context, listen: false).getContactDetailsById(
-        Provider.of<AuthProvider>(context, listen: false).accessToken,
-        widget.id);
+    print('build');
     return Scaffold(
       appBar: AppBar(
-        title: Consumer<ContactsProvider>(builder: (context, provider, child) {
-          return Text(provider.contact.name);
-        }),
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: 16),
             child: GestureDetector(
               onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => ContactUpdateFormScreen(
-                      id: widget.id,
-                      email: context.read<ContactsProvider>().contact.email,
-                      phone: context.read<ContactsProvider>().contact.phone,
-                      name: context.read<ContactsProvider>().contact.name,
-                    ),
-                  ),
-                );
+                // Navigator.push(
+                //   context,
+                //   MaterialPageRoute(
+                //     builder: (context) => ContactUpdateFormScreen(
+                //       id: widget.id,
+                //       email: '',
+                //       phone: '',
+                //       name: '',
+                //     ),
+                //   ),
+                // );
               },
               child: const Icon(
                 Icons.edit,
@@ -81,17 +73,17 @@ class _ContactDetailsScreenState extends State<ContactDetailsScreen> {
                 const SizedBox(
                   height: 15,
                 ),
-                Consumer<ContactsProvider>(
-                  builder: (context, provider, child) {
-                    return Text(
-                      provider.contact.name,
-                      style: const TextStyle(
-                        fontSize: 22,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    );
-                  },
-                ),
+                // Consumer<ContactsProvider>(
+                //   builder: (context, provider, child) {
+                //     return Text(
+                //       provider.contact.name,
+                //       style: const TextStyle(
+                //         fontSize: 22,
+                //         fontWeight: FontWeight.w500,
+                //       ),
+                //     );
+                //   },
+                // ),
               ],
             ),
           ),
@@ -107,17 +99,17 @@ class _ContactDetailsScreenState extends State<ContactDetailsScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Consumer<ContactsProvider>(
-                      builder: (context, provider, child) {
-                        return Text(
-                          provider.contact.phone,
-                          style: const TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        );
-                      },
-                    ),
+                    // Consumer<ContactsProvider>(
+                    //   builder: (context, provider, child) {
+                    //     return Text(
+                    //       provider.contact.phone,
+                    //       style: const TextStyle(
+                    //         fontSize: 16,
+                    //         fontWeight: FontWeight.w500,
+                    //       ),
+                    //     );
+                    //   },
+                    // ),
                     const Text('Mobile'),
                   ],
                 ),
@@ -151,17 +143,17 @@ class _ContactDetailsScreenState extends State<ContactDetailsScreen> {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Consumer<ContactsProvider>(
-                      builder: (context, provider, child) {
-                        return Text(
-                          provider.contact.email,
-                          style: const TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        );
-                      },
-                    ),
+                    // Consumer<ContactsProvider>(
+                    //   builder: (context, provider, child) {
+                    //     return Text(
+                    //       provider.contact.email,
+                    //       style: const TextStyle(
+                    //         fontSize: 16,
+                    //         fontWeight: FontWeight.w500,
+                    //       ),
+                    //     );
+                    //   },
+                    // ),
                     const Text('Email'),
                   ],
                 ),

@@ -1,4 +1,5 @@
 import 'package:contacts_app/providers/auth_provider.dart';
+import 'package:contacts_app/providers/theme_provider.dart';
 import 'package:contacts_app/screens/login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -34,7 +35,9 @@ class _SignupScreenState extends State<SignupScreen> {
               width: 400,
               height: 400,
               decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(.7),
+                  color: context.read<ThemeProvider>().isDark
+                      ? const Color.fromARGB(255, 71, 71, 71).withOpacity(.7)
+                      : Colors.white.withOpacity(.7),
                   borderRadius: BorderRadius.circular(15)),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -53,7 +56,9 @@ class _SignupScreenState extends State<SignupScreen> {
                     margin: const EdgeInsets.all(8),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(15),
-                      color: Color.fromARGB(255, 212, 212, 212),
+                      color: context.read<ThemeProvider>().isDark
+                          ? Colors.black.withOpacity(.7)
+                          : Colors.white.withOpacity(.7),
                     ),
                     child: TextFormField(
                       controller: _usernameController,
@@ -72,7 +77,9 @@ class _SignupScreenState extends State<SignupScreen> {
                     margin: const EdgeInsets.all(8),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(15),
-                      color: Color.fromARGB(255, 212, 212, 212),
+                      color: context.read<ThemeProvider>().isDark
+                          ? Colors.black.withOpacity(.7)
+                          : Colors.white.withOpacity(.7),
                     ),
                     child: TextFormField(
                       controller: _emailController,
@@ -91,7 +98,9 @@ class _SignupScreenState extends State<SignupScreen> {
                     margin: const EdgeInsets.all(8),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(15),
-                      color: Color.fromARGB(255, 212, 212, 212),
+                      color: context.read<ThemeProvider>().isDark
+                          ? Colors.black.withOpacity(.7)
+                          : Colors.white.withOpacity(.7),
                     ),
                     child: TextFormField(
                       controller: _passwordController,

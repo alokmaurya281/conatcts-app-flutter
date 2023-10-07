@@ -33,12 +33,24 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  void token() {
+    final authProvider =
+        Provider.of<AuthProvider>(context, listen: false).getToken();
+  }
+
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    token();
+  }
 
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    final themeProvider = Provider.of<ThemeProvider>(context);
+    final themeProvider = context.watch<ThemeProvider>();
+    final authProvider = context.watch<AuthProvider>();
+
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
@@ -48,10 +60,9 @@ class _MyAppState extends State<MyApp> {
         useMaterial3: true,
       ),
       themeMode: themeProvider.isDark ? ThemeMode.dark : ThemeMode.light,
-      home: context.read<AuthProvider>().isLoggedIn &&
-              context.read<AuthProvider>().accessToken.isNotEmpty
-          ? const HomeScreen()
-          : const LoginScreen(),
+      home: authProvider.isLoggedIn && authProvider.accessToken.isNotEmpty
+          ? HomeScreen()
+          : LoginScreen(),
     );
   }
 }

@@ -1,7 +1,18 @@
 import 'package:flutter/material.dart';
 
 class ContactDetailsScreen extends StatefulWidget {
-  const ContactDetailsScreen({super.key});
+  final String id;
+  final String email;
+  final String phone;
+  final String name;
+
+  const ContactDetailsScreen({
+    super.key,
+    required this.id,
+    required this.email,
+    required this.phone,
+    required this.name,
+  });
 
   @override
   State<ContactDetailsScreen> createState() => _ContactDetailsScreenState();
@@ -12,7 +23,7 @@ class _ContactDetailsScreenState extends State<ContactDetailsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Name of contact'),
+        title: Text(widget.name),
         actions: const [
           Padding(
             padding: EdgeInsets.only(right: 16),
@@ -34,7 +45,7 @@ class _ContactDetailsScreenState extends State<ContactDetailsScreen> {
           ),
         ],
       ),
-      body: const Column(
+      body: Column(
         children: [
           SizedBox(
             height: 50,
@@ -46,14 +57,14 @@ class _ContactDetailsScreenState extends State<ContactDetailsScreen> {
                   width: 100,
                   height: 100,
                   child: CircleAvatar(
-                    backgroundImage: AssetImage('assets/images/image1.jpg'),
+                    backgroundImage: AssetImage('assets/images/person.png'),
                   ),
                 ),
                 SizedBox(
                   height: 15,
                 ),
                 Text(
-                  'Name of contact',
+                  widget.name,
                   style: TextStyle(
                     fontSize: 22,
                     fontWeight: FontWeight.w500,
@@ -75,7 +86,7 @@ class _ContactDetailsScreenState extends State<ContactDetailsScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      '0987654321',
+                      widget.phone,
                       style: TextStyle(
                         fontSize: 16,
                       ),

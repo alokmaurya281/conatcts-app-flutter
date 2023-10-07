@@ -23,6 +23,7 @@ class _HomeScreenState extends State<HomeScreen> {
         Provider.of<AuthProvider>(context, listen: false).accessToken);
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         title: const Text('Contacts'),
         actions: [
           Padding(
@@ -104,8 +105,12 @@ class _HomeScreenState extends State<HomeScreen> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) =>
-                                    const ContactDetailsScreen(),
+                                builder: (context) => ContactDetailsScreen(
+                                  id: contactslist[index].id,
+                                  name: contactslist[index].name,
+                                  email: contactslist[index].email,
+                                  phone: contactslist[index].phone,
+                                ),
                               ),
                             );
                           },

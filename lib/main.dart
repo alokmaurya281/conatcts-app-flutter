@@ -34,8 +34,7 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   void token() {
-    final authProvider =
-        Provider.of<AuthProvider>(context, listen: false).getToken();
+    Provider.of<AuthProvider>(context, listen: false).getToken();
   }
 
   @override

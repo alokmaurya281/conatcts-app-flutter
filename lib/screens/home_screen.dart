@@ -16,11 +16,20 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  @override
-  Widget build(BuildContext context) {
-    print("object");
+  void data() {
     Provider.of<ContactsProvider>(context, listen: false).fetchContactsList(
         Provider.of<AuthProvider>(context, listen: false).accessToken);
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    data();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,

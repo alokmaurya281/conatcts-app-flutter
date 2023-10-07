@@ -94,10 +94,37 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           Consumer<ContactsProvider>(builder: (context, provider, child) {
             final contactslist = provider.contactsList;
-            return provider.isLoading
-                ? CircularProgressIndicator()
-                : Expanded(
-                    child: ListView.builder(
+            return Expanded(
+              child: provider.isLoading
+                  ? Shimmer.fromColors(
+                      period: const Duration(seconds: 2),
+                      baseColor: const Color.fromARGB(255, 140, 140, 140),
+                      highlightColor: const Color.fromARGB(255, 255, 255, 255),
+                      child: ListView.builder(
+                          itemCount: 10,
+                          itemBuilder: (context, index) {
+                            return Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 16),
+                              child: Card(
+                                elevation: 1,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                child: const Row(
+                                  children: [
+                                    SizedBox(
+                                      width: 60,
+                                      height: 60,
+                                      child: CircleAvatar(),
+                                    )
+                                  ],
+                                ),
+                              ),
+                            );
+                          }),
+                    )
+                  : ListView.builder(
                       itemCount: contactslist.length,
                       itemBuilder: (context, index) {
                         return GestureDetector(
@@ -107,9 +134,6 @@ class _HomeScreenState extends State<HomeScreen> {
                               MaterialPageRoute(
                                 builder: (context) => ContactDetailsScreen(
                                   id: contactslist[index].id,
-                                  name: contactslist[index].name,
-                                  email: contactslist[index].email,
-                                  phone: contactslist[index].phone,
                                 ),
                               ),
                             );
@@ -119,7 +143,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         );
                       },
                     ),
-                  );
+            );
           })
         ],
       ),

@@ -1,17 +1,15 @@
+import 'package:contacts_app/providers/auth_provider.dart';
+import 'package:contacts_app/providers/contacts_provider.dart';
+import 'package:contacts_app/screens/contact_update_form_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class ContactDetailsScreen extends StatefulWidget {
   final String id;
-  final String email;
-  final String phone;
-  final String name;
 
   const ContactDetailsScreen({
     super.key,
     required this.id,
-    required this.email,
-    required this.phone,
-    required this.name,
   });
 
   @override
@@ -21,23 +19,43 @@ class ContactDetailsScreen extends StatefulWidget {
 class _ContactDetailsScreenState extends State<ContactDetailsScreen> {
   @override
   Widget build(BuildContext context) {
+    Provider.of<ContactsProvider>(context, listen: false).getContactDetailsById(
+        Provider.of<AuthProvider>(context, listen: false).accessToken,
+        widget.id);
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.name),
-        actions: const [
+        title: Consumer<ContactsProvider>(builder: (context, provider, child) {
+          return Text(provider.contact.name);
+        }),
+        actions: [
           Padding(
-            padding: EdgeInsets.only(right: 16),
-            child: Icon(
-              Icons.edit,
+            padding: const EdgeInsets.only(right: 16),
+            child: GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ContactUpdateFormScreen(
+                      id: widget.id,
+                      email: context.read<ContactsProvider>().contact.email,
+                      phone: context.read<ContactsProvider>().contact.phone,
+                      name: context.read<ContactsProvider>().contact.name,
+                    ),
+                  ),
+                );
+              },
+              child: const Icon(
+                Icons.edit,
+              ),
             ),
           ),
-          Padding(
+          const Padding(
             padding: EdgeInsets.only(right: 16),
             child: Icon(
               Icons.qr_code,
             ),
           ),
-          Padding(
+          const Padding(
             padding: EdgeInsets.only(right: 16),
             child: Icon(
               Icons.more_vert,
@@ -47,33 +65,37 @@ class _ContactDetailsScreenState extends State<ContactDetailsScreen> {
       ),
       body: Column(
         children: [
-          SizedBox(
+          const SizedBox(
             height: 50,
           ),
           Center(
             child: Column(
               children: [
-                SizedBox(
+                const SizedBox(
                   width: 100,
                   height: 100,
                   child: CircleAvatar(
                     backgroundImage: AssetImage('assets/images/person.png'),
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 15,
                 ),
-                Text(
-                  widget.name,
-                  style: TextStyle(
-                    fontSize: 22,
-                    fontWeight: FontWeight.w500,
-                  ),
-                )
+                Consumer<ContactsProvider>(
+                  builder: (context, provider, child) {
+                    return Text(
+                      provider.contact.name,
+                      style: const TextStyle(
+                        fontSize: 22,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    );
+                  },
+                ),
               ],
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 50,
           ),
           Row(
@@ -81,21 +103,26 @@ class _ContactDetailsScreenState extends State<ContactDetailsScreen> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Padding(
-                padding: EdgeInsets.only(left: 16),
+                padding: const EdgeInsets.only(left: 16),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      widget.phone,
-                      style: TextStyle(
-                        fontSize: 16,
-                      ),
+                    Consumer<ContactsProvider>(
+                      builder: (context, provider, child) {
+                        return Text(
+                          provider.contact.phone,
+                          style: const TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        );
+                      },
                     ),
-                    Text('Mobile'),
+                    const Text('Mobile'),
                   ],
                 ),
               ),
-              Row(
+              const Row(
                 children: [
                   Padding(
                     padding: EdgeInsets.only(right: 16),
@@ -112,6 +139,40 @@ class _ContactDetailsScreenState extends State<ContactDetailsScreen> {
                 ],
               )
             ],
+          ),
+          SizedBox(
+            height: 20,
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Consumer<ContactsProvider>(
+                      builder: (context, provider, child) {
+                        return Text(
+                          provider.contact.email,
+                          style: const TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        );
+                      },
+                    ),
+                    const Text('Email'),
+                  ],
+                ),
+                Padding(
+                  padding: EdgeInsets.only(right: 16),
+                  child: Icon(
+                    Icons.email,
+                  ),
+                )
+              ],
+            ),
           )
         ],
       ),

@@ -91,4 +91,74 @@ class ContactsProvider extends ChangeNotifier {
       notifyListeners();
     }
   }
+
+  /// update contact
+
+  Future<void> updateContactDetails(
+      String token, String name, String email, String phone, String id) async {
+    _error = '';
+    notifyListeners();
+    try {
+      final response = await http.put(
+        Uri.parse('$updateContact/$id'),
+        headers: {
+          'Content-Type': 'application/json; charset=UTF-8',
+          'Authorization': 'Bearer $token'
+        },
+        body: jsonEncode({
+          "name": name,
+          "email": email,
+          "phone": phone,
+        }),
+      );
+      final Map<String, dynamic> data = json.decode(response.body);
+      if (response.statusCode == 200) {
+        _contact = Contact(
+            id: data['data']['_id'],
+            name: data['data']['name'],
+            userId: data['data']['user_id'],
+            phone: data['data']['phone'],
+            email: data['data']['email']);
+        notifyListeners();
+      } else {
+        _error = data['message'];
+        notifyListeners();
+      }
+    } catch (e) {
+      _error = e.toString();
+      notifyListeners();
+    }
+  }
+
+  /// get contact details by id
+
+  Future<void> getContactDetailsById(String token, String id) async {
+    _error = '';
+    // notifyListeners();
+    try {
+      final response = await http.get(
+        Uri.parse('$contactById/$id'),
+        headers: {
+          'Content-Type': 'application/json; charset=UTF-8',
+          'Authorization': 'Bearer $token'
+        },
+      );
+      final Map<String, dynamic> data = json.decode(response.body);
+      if (response.statusCode == 200) {
+        _contact = Contact(
+            id: data['data']['_id'],
+            name: data['data']['name'],
+            userId: data['data']['user_id'],
+            phone: data['data']['phone'],
+            email: data['data']['email']);
+        notifyListeners();
+      } else {
+        _error = data['message'];
+        notifyListeners();
+      }
+    } catch (e) {
+      _error = e.toString();
+      notifyListeners();
+    }
+  }
 }

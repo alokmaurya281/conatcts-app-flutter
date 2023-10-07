@@ -1,4 +1,5 @@
 import 'package:contacts_app/providers/auth_provider.dart';
+import 'package:contacts_app/providers/contacts_provider.dart';
 import 'package:contacts_app/providers/theme_provider.dart';
 import 'package:contacts_app/screens/home_screen.dart';
 import 'package:contacts_app/screens/login_screen.dart';
@@ -14,6 +15,9 @@ void main() {
         ),
         ChangeNotifierProvider(
           create: (context) => AuthProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => ContactsProvider(),
         ),
       ],
       child: const MyApp(),
@@ -34,8 +38,7 @@ class _MyAppState extends State<MyApp> {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    // final authProvider = Provider.of<AuthProvider>(context);
-    // authProvider.getToken();
+    final themeProvider = Provider.of<ThemeProvider>(context);
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
@@ -44,9 +47,7 @@ class _MyAppState extends State<MyApp> {
       darkTheme: ThemeData.dark(
         useMaterial3: true,
       ),
-      themeMode: context.read<ThemeProvider>().isDark
-          ? ThemeMode.dark
-          : ThemeMode.light,
+      themeMode: themeProvider.isDark ? ThemeMode.dark : ThemeMode.light,
       home: context.read<AuthProvider>().isLoggedIn &&
               context.read<AuthProvider>().accessToken.isNotEmpty
           ? const HomeScreen()

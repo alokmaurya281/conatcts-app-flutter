@@ -9,12 +9,12 @@ import 'package:shared_preferences/shared_preferences.dart';
 class AuthProvider extends ChangeNotifier {
   bool _isLoggedIn = false;
   bool _isLoading = false;
+  bool get isLoading => _isLoading;
 
   String _error = '';
   String get error => _error;
 
   bool get isLoggedIn => _isLoggedIn;
-  bool get isLoading => _isLoading;
 
   String _accessToken = '';
   String get accessToken => _accessToken;

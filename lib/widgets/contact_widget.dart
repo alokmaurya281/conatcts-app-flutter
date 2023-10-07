@@ -1,12 +1,18 @@
 import 'package:flutter/material.dart';
 
 class ContactWidgetTile extends StatelessWidget {
-  const ContactWidgetTile({super.key});
+  final String name;
+  final String image;
+  const ContactWidgetTile({
+    super.key,
+    required this.image,
+    required this.name,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(vertical: 8),
+      padding: const EdgeInsets.symmetric(vertical: 8),
       child: ListTile(
         leading: SizedBox(
           width: 60,
@@ -15,7 +21,7 @@ class ContactWidgetTile extends StatelessWidget {
             backgroundImage: AssetImage('assets/images/image1.jpg'),
           ),
         ),
-        title: Text(
+        title: const Text(
           'Alok Maurya',
           style: TextStyle(
             fontWeight: FontWeight.w500,

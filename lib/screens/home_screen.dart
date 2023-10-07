@@ -1,10 +1,12 @@
 import 'package:contacts_app/providers/auth_provider.dart';
+import 'package:contacts_app/providers/contacts_provider.dart';
 import 'package:contacts_app/providers/theme_provider.dart';
-import 'package:contacts_app/screens/contact_details_screen.dart';
+import 'package:contacts_app/screens/contact_form_screen.dart';
 import 'package:contacts_app/screens/login_screen.dart';
 import 'package:contacts_app/widgets/contact_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shimmer/shimmer.dart';
 // import 'package:shimmer/shimmer.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -34,16 +36,20 @@ class _HomeScreenState extends State<HomeScreen> {
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: 16),
-            child: GestureDetector(
-              onTap: () {
-                context.read<ThemeProvider>().setTheme();
+            child: Consumer<ThemeProvider>(
+              builder: (context, provider, child) {
+                return GestureDetector(
+                  onTap: () {
+                    provider.setTheme();
+                  },
+                  child: Icon(
+                    context.read<ThemeProvider>().isDark
+                        ? Icons.light_mode
+                        : Icons.dark_mode,
+                    size: 24,
+                  ),
+                );
               },
-              child: Icon(
-                context.read<ThemeProvider>().isDark
-                    ? Icons.light_mode
-                    : Icons.dark_mode,
-                size: 24,
-              ),
             ),
           ),
           Padding(
@@ -94,37 +100,67 @@ class _HomeScreenState extends State<HomeScreen> {
           const SizedBox(
             height: 20,
           ),
-          Expanded(
-            child: ListView.builder(
-              itemCount: 20,
-              itemBuilder: (context, index) {
-                return GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const ContactDetailsScreen(),
-                      ),
-                    );
+          FutureBuilder(
+            future: context
+                .read<ContactsProvider>()
+                .fetchContactsList(context.read<AuthProvider>().accessToken),
+            builder: (context, snapshot) {
+              return Expanded(
+                child: ListView.builder(
+                  itemCount:
+                      context.read<ContactsProvider>().contactsList.length,
+                  itemBuilder: (context, index) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return Shimmer.fromColors(
+                        baseColor: Colors.grey,
+                        highlightColor:
+                            const Color.fromARGB(255, 232, 230, 230),
+                        child: Row(
+                          children: [
+                            SizedBox(
+                              width: 60,
+                              height: 60,
+                              child: CircleAvatar(),
+                            ),
+                          ],
+                        ),
+                      );
+                    } else {
+                      final value =
+                          context.read<ContactsProvider>().contactsList;
+                      return ContactWidgetTile(
+                        image: '',
+                        name: value[index].email,
+                      );
+                    }
                   },
-                  child: const ContactWidgetTile(),
-                );
-              },
-            ),
-          )
+                ),
+              );
+            },
+          ),
         ],
       ),
-      floatingActionButton: Container(
-        width: 50,
-        height: 50,
-        decoration: const BoxDecoration(
-          shape: BoxShape.circle,
-          color: Color.fromARGB(255, 133, 18, 226),
-        ),
-        child: const Icon(
-          Icons.add,
-          color: Color.fromRGBO(215, 215, 215, 1),
-          size: 36,
+      floatingActionButton: GestureDetector(
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const ContactFormScreen(),
+            ),
+          );
+        },
+        child: Container(
+          width: 50,
+          height: 50,
+          decoration: const BoxDecoration(
+            shape: BoxShape.circle,
+            color: Color.fromARGB(255, 133, 18, 226),
+          ),
+          child: const Icon(
+            Icons.add,
+            color: Color.fromRGBO(215, 215, 215, 1),
+            size: 36,
+          ),
         ),
       ),
     );

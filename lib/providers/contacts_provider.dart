@@ -28,6 +28,7 @@ class ContactsProvider extends ChangeNotifier {
 
   Future<void> fetchContactsList(String token) async {
     _error = '';
+    _isLoading = true;
     // notifyListeners();
     try {
       final response = await http.get(
@@ -39,14 +40,9 @@ class ContactsProvider extends ChangeNotifier {
       );
       final Map<String, dynamic> data = json.decode(response.body);
       if (response.statusCode == 200) {
-        _contacts.add(
-          Contact(
-              id: data['data']['_id'],
-              name: data['data']['name'],
-              userId: data['data']['user_id'],
-              phone: data['data']['phone'],
-              email: data['data']['email']),
-        );
+        _contacts = (data['data'] as List)
+            .map((data) => Contact.fromJson(data))
+            .toList();
         notifyListeners();
       } else {
         _error = data['message'];
@@ -56,6 +52,8 @@ class ContactsProvider extends ChangeNotifier {
       _error = e.toString();
       notifyListeners();
     }
+    _isLoading = false;
+    notifyListeners();
   }
 
   Future<void> addContact(

@@ -21,9 +21,9 @@ class ContactWidgetTile extends StatelessWidget {
             backgroundImage: AssetImage('assets/images/image1.jpg'),
           ),
         ),
-        title: const Text(
-          'Alok Maurya',
-          style: TextStyle(
+        title: Text(
+          name,
+          style: const TextStyle(
             fontWeight: FontWeight.w500,
             fontSize: 16,
           ),

@@ -1,6 +1,7 @@
 import 'package:contacts_app/providers/auth_provider.dart';
 import 'package:contacts_app/providers/contacts_provider.dart';
 import 'package:contacts_app/providers/theme_provider.dart';
+import 'package:contacts_app/providers/user_provider.dart';
 import 'package:contacts_app/screens/home_screen.dart';
 import 'package:contacts_app/screens/login_screen.dart';
 import 'package:flutter/material.dart';
@@ -18,6 +19,9 @@ void main() {
         ),
         ChangeNotifierProvider(
           create: (context) => ContactsProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => UserProvider(),
         ),
       ],
       child: const MyApp(),

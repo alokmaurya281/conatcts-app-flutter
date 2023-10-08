@@ -2,8 +2,8 @@ import 'package:contacts_app/providers/auth_provider.dart';
 import 'package:contacts_app/providers/contacts_provider.dart';
 import 'package:contacts_app/providers/theme_provider.dart';
 import 'package:contacts_app/screens/contact_form_screen.dart';
-import 'package:contacts_app/screens/login_screen.dart';
 import 'package:contacts_app/widgets/contact_widget.dart';
+import 'package:contacts_app/widgets/popupmenuwidget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
@@ -36,7 +36,7 @@ class _HomeScreenState extends State<HomeScreen> {
         title: const Text('Contacts'),
         actions: [
           Padding(
-            padding: const EdgeInsets.only(right: 16),
+            padding: const EdgeInsets.only(right: 4),
             child: Consumer<ThemeProvider>(
               builder: (context, provider, child) {
                 return GestureDetector(
@@ -53,30 +53,7 @@ class _HomeScreenState extends State<HomeScreen> {
               },
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.only(right: 16),
-            child: GestureDetector(
-              onTap: () async {
-                await context.read<AuthProvider>().signout();
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const LoginScreen(),
-                  ),
-                );
-              },
-              child: const Icon(
-                Icons.logout,
-                size: 24,
-              ),
-            ),
-          ),
-          const Padding(
-            padding: EdgeInsets.only(right: 16),
-            child: Icon(
-              Icons.settings,
-            ),
-          ),
+          const PopUpMenuWidget(),
         ],
       ),
       body: Column(
@@ -135,16 +112,18 @@ class _HomeScreenState extends State<HomeScreen> {
                               );
                             }),
                       )
-                    : ListView.builder(
-                        itemCount: contactslist.length,
-                        itemBuilder: (context, index) {
-                          return ContactWidgetTile(
-                            image: 'image',
-                            name: contactslist[index].name,
-                            id: contactslist[index].id,
-                          );
-                        },
-                      ),
+                    : contactslist.length == 0
+                        ? Text('No contact found')
+                        : ListView.builder(
+                            itemCount: contactslist.length,
+                            itemBuilder: (context, index) {
+                              return ContactWidgetTile(
+                                image: 'image',
+                                name: contactslist[index].name,
+                                id: contactslist[index].id,
+                              );
+                            },
+                          ),
               );
             },
           ),

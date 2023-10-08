@@ -1,6 +1,7 @@
 import 'package:contacts_app/providers/auth_provider.dart';
 import 'package:contacts_app/providers/contacts_provider.dart';
 import 'package:contacts_app/screens/contact_update_form_screen.dart';
+import 'package:contacts_app/screens/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
@@ -36,7 +37,7 @@ class _ContactDetailsScreenState extends State<ContactDetailsScreen> {
     return Consumer<ContactsProvider>(
       builder: (context, provider, child) {
         if (provider.contact.name.isEmpty) {
-          return Center(
+          return const Center(
             child: CircularProgressIndicator(),
           );
         }
@@ -77,12 +78,6 @@ class _ContactDetailsScreenState extends State<ContactDetailsScreen> {
                   Icons.qr_code,
                 ),
               ),
-              const Padding(
-                padding: EdgeInsets.only(right: 16),
-                child: Icon(
-                  Icons.more_vert,
-                ),
-              ),
             ],
           ),
           body: Column(
@@ -105,12 +100,13 @@ class _ContactDetailsScreenState extends State<ContactDetailsScreen> {
                     ),
                     provider.contact.name.isEmpty
                         ? Shimmer.fromColors(
-                            child: SizedBox(
+                            baseColor: const Color.fromARGB(255, 102, 101, 101),
+                            highlightColor: Colors.grey,
+                            child: const SizedBox(
                               width: 100,
                               height: 40,
                             ),
-                            baseColor: const Color.fromARGB(255, 102, 101, 101),
-                            highlightColor: Colors.grey)
+                          )
                         : Text(
                             provider.contact.name,
                             style: const TextStyle(
@@ -162,7 +158,7 @@ class _ContactDetailsScreenState extends State<ContactDetailsScreen> {
                   )
                 ],
               ),
-              SizedBox(
+              const SizedBox(
                 height: 20,
               ),
               Padding(
@@ -190,6 +186,69 @@ class _ContactDetailsScreenState extends State<ContactDetailsScreen> {
                       ),
                     )
                   ],
+                ),
+              ),
+              const SizedBox(
+                height: 50,
+              ),
+              Center(
+                child: SizedBox(
+                  width: 160,
+                  height: 40,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color.fromARGB(179, 245, 61, 5),
+                        shadowColor: Colors.black),
+                    onPressed: () {
+                      showDialog(
+                          context: context,
+                          builder: (context) {
+                            return AlertDialog.adaptive(
+                              title: const Text('Confirm'),
+                              content: const Text(
+                                  'Are you sure you want to delete this contact?'),
+                              actions: <Widget>[
+                                TextButton(
+                                  child: const Text('Cancel'),
+                                  onPressed: () {
+                                    Navigator.of(context)
+                                        .pop(); // Close the dialog
+                                  },
+                                ),
+                                TextButton(
+                                  child: provider.isLoading
+                                      ? const Center(
+                                          child: CircularProgressIndicator
+                                              .adaptive(),
+                                        )
+                                      : const Text('Confirm'),
+                                  onPressed: () async {
+                                    provider.setLoading(true);
+                                    await provider.deleteContactbyId(
+                                      context.read<AuthProvider>().accessToken,
+                                      widget.id,
+                                    );
+                                    provider.setLoading(false);
+                                    Navigator.of(context).pushReplacement(
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            const HomeScreen(),
+                                      ),
+                                    ); // Close the dialog
+                                  },
+                                ),
+                              ],
+                            );
+                          });
+                    },
+                    child: const Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        Text('Delete Contact'),
+                        Icon(Icons.delete),
+                      ],
+                    ),
+                  ),
                 ),
               )
             ],

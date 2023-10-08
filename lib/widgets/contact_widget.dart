@@ -33,7 +33,7 @@ class ContactWidgetTile extends StatelessWidget {
             width: 60,
             height: 60,
             child: CircleAvatar(
-              backgroundImage: AssetImage('assets/images/image1.jpg'),
+              backgroundImage: AssetImage('assets/images/person.png'),
             ),
           ),
           title: Text(

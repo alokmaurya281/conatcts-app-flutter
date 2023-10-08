@@ -166,4 +166,41 @@ class ContactsProvider extends ChangeNotifier {
     _isLoading = false;
     notifyListeners();
   }
+
+  /// get contact details by id
+
+  Future<void> deleteContactbyId(String token, String id) async {
+    _error = '';
+
+    _contact = Contact(id: '', name: '', email: '', phone: '', userId: '');
+    // notifyListeners();
+    try {
+      final response = await http.delete(
+        Uri.parse('$deleteContact/$id'),
+        headers: {
+          'Content-Type': 'application/json; charset=UTF-8',
+          'Authorization': 'Bearer $token'
+        },
+      );
+      final Map<String, dynamic> data = json.decode(response.body);
+      if (response.statusCode == 200) {
+        _contact = Contact(
+            id: data['data']['_id'],
+            name: data['data']['name'],
+            userId: data['data']['user_id'],
+            phone: data['data']['phone'],
+            email: data['data']['email']);
+        // _isLoading = false;
+        notifyListeners();
+      } else {
+        _error = data['message'];
+        notifyListeners();
+      }
+    } catch (e) {
+      _error = e.toString();
+      notifyListeners();
+    }
+    _isLoading = false;
+    notifyListeners();
+  }
 }

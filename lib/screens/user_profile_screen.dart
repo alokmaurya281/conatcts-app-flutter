@@ -1,41 +1,65 @@
 import 'package:contacts_app/providers/auth_provider.dart';
-import 'package:contacts_app/providers/contacts_provider.dart';
 import 'package:contacts_app/providers/theme_provider.dart';
-import 'package:contacts_app/screens/home_screen.dart';
+import 'package:contacts_app/providers/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 
-class ContactFormScreen extends StatefulWidget {
-  const ContactFormScreen({super.key});
+class UserProfileScreen extends StatefulWidget {
+  const UserProfileScreen({super.key});
 
   @override
-  State<ContactFormScreen> createState() => _ContactFormScreenState();
+  State<UserProfileScreen> createState() => _UserProfileScreenState();
 }
 
-class _ContactFormScreenState extends State<ContactFormScreen> {
-  TextEditingController _nameController = TextEditingController();
+class _UserProfileScreenState extends State<UserProfileScreen> {
+  TextEditingController _usernameController = TextEditingController();
   TextEditingController _emailController = TextEditingController();
-  TextEditingController _phoneController = TextEditingController();
+
+  void data() {
+    Provider.of<UserProvider>(context, listen: false).userProfileData(
+      Provider.of<AuthProvider>(context, listen: false).accessToken,
+    );
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    data();
+  }
 
   @override
   Widget build(BuildContext context) {
+    _emailController.text = context.read<UserProvider>().user.email;
+    _usernameController.text = context.read<UserProvider>().user.username;
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Create New Contact'),
+        title: Text(
+          'My Profile',
+          style: const TextStyle(
+            fontSize: 22,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
       ),
-      body: Container(
-          width: double.infinity,
-          height: double.infinity,
-          decoration: const BoxDecoration(),
-          child: Center(
+      body: Consumer<UserProvider>(
+        builder: (context, provider, child) {
+          if (provider.user.username.isEmpty) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+          return Center(
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               decoration: BoxDecoration(
-                  color: context.read<ThemeProvider>().isDark
-                      ? const Color.fromARGB(255, 66, 66, 66).withOpacity(.7)
-                      : Colors.white.withOpacity(.7),
-                  borderRadius: BorderRadius.circular(15)),
+                color: context.read<ThemeProvider>().isDark
+                    ? Color.fromARGB(255, 55, 55, 55).withOpacity(.7)
+                    : Colors.white.withOpacity(.7),
+                borderRadius: BorderRadius.circular(15),
+              ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 // mainAxisAlignment: MainAxisAlignment.center,
@@ -64,10 +88,10 @@ class _ContactFormScreenState extends State<ContactFormScreen> {
                             ? Colors.black.withOpacity(.7)
                             : const Color.fromARGB(255, 183, 183, 183)),
                     child: TextFormField(
-                      controller: _nameController,
+                      controller: _usernameController,
                       style: const TextStyle(fontSize: 14),
-                      decoration: const InputDecoration(
-                        hintText: 'Enter Name',
+                      decoration: InputDecoration(
+                        hintText: 'Enter Username',
                         prefixIcon: Icon(Icons.person),
                         border: InputBorder.none,
                         enabledBorder: InputBorder.none,
@@ -84,33 +108,12 @@ class _ContactFormScreenState extends State<ContactFormScreen> {
                             ? Colors.black.withOpacity(.7)
                             : const Color.fromARGB(255, 183, 183, 183)),
                     child: TextFormField(
+                      enabled: false,
                       controller: _emailController,
                       style: const TextStyle(fontSize: 14),
-                      decoration: const InputDecoration(
-                        hintText: 'Email',
+                      decoration: InputDecoration(
+                        hintText: 'Enter email',
                         prefixIcon: Icon(Icons.email),
-                        border: InputBorder.none,
-                        enabledBorder: InputBorder.none,
-                      ),
-                    ),
-                  ),
-                  Container(
-                    width: double.infinity,
-                    height: 50,
-                    margin: const EdgeInsets.all(8),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(15),
-                      color: context.read<ThemeProvider>().isDark
-                          ? Colors.black.withOpacity(.7)
-                          : const Color.fromARGB(255, 183, 183, 183)
-                              .withOpacity(.7),
-                    ),
-                    child: TextFormField(
-                      controller: _phoneController,
-                      style: const TextStyle(fontSize: 14),
-                      decoration: const InputDecoration(
-                        hintText: 'Enter Mobile Number',
-                        prefixIcon: Icon(Icons.call),
                         border: InputBorder.none,
                         enabledBorder: InputBorder.none,
                       ),
@@ -125,45 +128,41 @@ class _ContactFormScreenState extends State<ContactFormScreen> {
                     child: ElevatedButton(
                       onPressed: () async {
                         if (_emailController.text.isNotEmpty &&
-                            _phoneController.text.isNotEmpty &&
-                            _nameController.text.isNotEmpty) {
-                          await context
-                              .read<ContactsProvider>()
-                              .setLoading(true);
-                          await context.read<ContactsProvider>().addContact(
+                            _usernameController.text.isNotEmpty) {
+                          await context.read<UserProvider>().setLoading(true);
+                          await context.read<UserProvider>().updateUserData(
                                 context.read<AuthProvider>().accessToken,
-                                _nameController.text,
+                                _usernameController.text,
                                 _emailController.text,
-                                _phoneController.text,
                               );
-                          if (context.read<ContactsProvider>().error.isEmpty &&
-                              context
-                                  .read<ContactsProvider>()
-                                  .contact
-                                  .id
-                                  .isNotEmpty) {
-                            context.read<ContactsProvider>().setLoading(false);
+                          if (context.read<UserProvider>().error.isEmpty &&
+                              context.read<UserProvider>().user.id.isNotEmpty) {
+                            context.read<UserProvider>().setLoading(false);
                             _emailController.clear();
-                            _nameController.clear();
-                            _phoneController.clear();
+                            _usernameController.clear();
                             Fluttertoast.showToast(
-                                msg: 'Contact Saved Successfully',
+                                msg: 'User Updated Successfully',
                                 toastLength: Toast.LENGTH_SHORT,
                                 gravity: ToastGravity.TOP,
                                 timeInSecForIosWeb: 1,
                                 backgroundColor: Colors.red,
                                 textColor: Colors.white,
                                 fontSize: 16.0);
-                            Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => const HomeScreen(),
-                              ),
-                            );
+                            // Navigator.pushReplacement(
+                            //   context,
+                            //   MaterialPageRoute(
+                            //     builder: (context) => ContactDetailsScreen(
+                            //       id: context
+                            //           .read<UserProvider>()
+                            //           .contact
+                            //           .id,
+                            //     ),
+                            //   ),
+                            // );
                           } else {
-                            context.read<ContactsProvider>().setLoading(false);
+                            context.read<UserProvider>().setLoading(false);
                             Fluttertoast.showToast(
-                                msg: context.read<ContactsProvider>().error,
+                                msg: context.read<UserProvider>().error,
                                 toastLength: Toast.LENGTH_SHORT,
                                 gravity: ToastGravity.TOP,
                                 timeInSecForIosWeb: 1,
@@ -174,7 +173,7 @@ class _ContactFormScreenState extends State<ContactFormScreen> {
                         } else {
                           context.read<AuthProvider>().setLoading(false);
                           Fluttertoast.showToast(
-                              msg: "Email,name and phone can not be blank!!",
+                              msg: "Email,username can not be blank!!",
                               toastLength: Toast.LENGTH_SHORT,
                               gravity: ToastGravity.TOP,
                               timeInSecForIosWeb: 1,
@@ -187,7 +186,7 @@ class _ContactFormScreenState extends State<ContactFormScreen> {
                         backgroundColor:
                             const Color.fromARGB(255, 212, 212, 212),
                       ),
-                      child: Consumer<ContactsProvider>(
+                      child: Consumer<UserProvider>(
                         builder: (context, provider, child) {
                           return provider.isLoading
                               ? const Center(
@@ -213,7 +212,9 @@ class _ContactFormScreenState extends State<ContactFormScreen> {
                 ],
               ),
             ),
-          )),
+          );
+        },
+      ),
     );
   }
 }

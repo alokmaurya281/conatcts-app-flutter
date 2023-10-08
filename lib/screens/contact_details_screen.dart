@@ -5,6 +5,7 @@ import 'package:contacts_app/screens/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ContactDetailsScreen extends StatefulWidget {
   final String id;
@@ -23,6 +24,34 @@ class _ContactDetailsScreenState extends State<ContactDetailsScreen> {
     Provider.of<ContactsProvider>(context, listen: false).getContactDetailsById(
         Provider.of<AuthProvider>(context, listen: false).accessToken,
         widget.id);
+  }
+
+  void _makePhoneCall(String phone) async {
+    String phoneNumber = 'tel:$phone'; // Replace with the desired phone number
+    if (await canLaunchUrl(Uri.parse(phoneNumber))) {
+      await launchUrl(Uri.parse(phoneNumber));
+    } else {
+      throw 'Could not launch $phoneNumber';
+    }
+  }
+
+  void _sendSms(String phone) async {
+    String phoneNumber = 'sms:$phone'; // Replace with the desired phone number
+    if (await canLaunchUrl(Uri.parse(phoneNumber))) {
+      await launchUrl(Uri.parse(phoneNumber));
+    } else {
+      throw 'Could not launch $phoneNumber';
+    }
+  }
+
+  void _sendEmail(String email) async {
+    String phoneNumber =
+        'mailto:$email'; // Replace with the desired phone number
+    if (await canLaunchUrl(Uri.parse(phoneNumber))) {
+      await launchUrl(Uri.parse(phoneNumber));
+    } else {
+      throw 'Could not launch $phoneNumber';
+    }
   }
 
   @override
@@ -140,18 +169,28 @@ class _ContactDetailsScreenState extends State<ContactDetailsScreen> {
                       ],
                     ),
                   ),
-                  const Row(
+                  Row(
                     children: [
                       Padding(
-                        padding: EdgeInsets.only(right: 16),
-                        child: Icon(
-                          Icons.call,
+                        padding: const EdgeInsets.only(right: 16),
+                        child: GestureDetector(
+                          onTap: () {
+                            _makePhoneCall(provider.contact.phone);
+                          },
+                          child: const Icon(
+                            Icons.call,
+                          ),
                         ),
                       ),
                       Padding(
-                        padding: EdgeInsets.only(right: 16),
-                        child: Icon(
-                          Icons.chat,
+                        padding: const EdgeInsets.only(right: 16),
+                        child: GestureDetector(
+                          onTap: () {
+                            _sendSms(provider.contact.phone);
+                          },
+                          child: const Icon(
+                            Icons.chat,
+                          ),
                         ),
                       )
                     ],
@@ -179,10 +218,15 @@ class _ContactDetailsScreenState extends State<ContactDetailsScreen> {
                         const Text('Email'),
                       ],
                     ),
-                    const Padding(
-                      padding: EdgeInsets.only(right: 16),
-                      child: Icon(
-                        Icons.email,
+                    Padding(
+                      padding: const EdgeInsets.only(right: 16),
+                      child: GestureDetector(
+                        onTap: () {
+                          _sendEmail(provider.contact.email);
+                        },
+                        child: const Icon(
+                          Icons.email,
+                        ),
                       ),
                     )
                   ],

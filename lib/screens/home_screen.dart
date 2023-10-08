@@ -5,6 +5,7 @@ import 'package:contacts_app/screens/contact_form_screen.dart';
 import 'package:contacts_app/widgets/contact_widget.dart';
 import 'package:contacts_app/widgets/popupmenuwidget.dart';
 import 'package:flutter/material.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
 
@@ -21,11 +22,23 @@ class _HomeScreenState extends State<HomeScreen> {
         Provider.of<AuthProvider>(context, listen: false).accessToken);
   }
 
+  void _requestPermission() async {
+    await Permission.phone.request();
+    // await Permission..request();
+
+    // if (status.isGranted) {
+    //   // Permission granted, proceed with making the call
+    // } else {
+    //   // Permission denied, handle accordingly
+    // }
+  }
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     data();
+    _requestPermission();
   }
 
   @override

@@ -31,9 +31,6 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
-    _emailController.text = context.read<UserProvider>().user.email;
-    _usernameController.text = context.read<UserProvider>().user.username;
-
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -51,6 +48,8 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
               child: CircularProgressIndicator(),
             );
           }
+          _emailController.text = context.read<UserProvider>().user.email;
+          _usernameController.text = context.read<UserProvider>().user.username;
           return Center(
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -62,11 +61,8 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
-                // mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  SizedBox(
-                    height: 70,
-                  ),
                   const SizedBox(
                     width: 100,
                     height: 100,

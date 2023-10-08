@@ -40,6 +40,9 @@ dependencies:
   shared_preferences: ^2.2.1
   shimmer: ^3.0.0
   fluttertoast: ^8.2.2
+  url_launcher: ^6.1.14
+  permission_handler: ^11.0.1
+  flutter_launcher_icons: ^0.13.1
 
 dev_dependencies:
   flutter_test:
@@ -67,6 +70,13 @@ flutter:
   assets:
     - assets/images/
   #   - images/a_dot_ham.jpeg
+
+flutter_icons:
+  image_path: "assets/icons/icon.jpeg" 
+  android: true
+  ios: true
+  # optionally, as transparency is not allowed on app store
+  # remove_alpha_ios: true
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

@@ -53,11 +53,8 @@ class _ContactUpdateFormScreenState extends State<ContactUpdateFormScreen> {
                   borderRadius: BorderRadius.circular(15)),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
-                // mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  SizedBox(
-                    height: 70,
-                  ),
                   const SizedBox(
                     width: 100,
                     height: 100,
